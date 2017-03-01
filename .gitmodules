@@ -1,0 +1,3 @@
+[submodule "BMP180_Breakout_Arduino_Library"]
+	path = BMP180_Breakout_Arduino_Library
+	url = https://github.com/sparkfun/BMP180_Breakout_Arduino_Library
