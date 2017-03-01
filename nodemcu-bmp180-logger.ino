@@ -1,16 +1,40 @@
 #include <SFE_BMP180.h>
 #include <Wire.h>
-
+#include <ESP8266WiFi.h>
+ 
 // You will need to create an SFE_BMP180 object, here called "pressure":
 
 SFE_BMP180 pressure;
 
 #define ALTITUDE 271.0 // Locale altitude in meters
+const char* ssid     = "mySSID";
+const char* password = "wifipassword";
+const char* eshost   = "es.local.net";
+const int*  esport   = 9200;
+const int*  pollms   = 5000
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("REBOOT");
+  delay(1000);
+
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  
+  WiFi.begin(ssid, password);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+ 
+  Serial.println();
+  Serial.println("WiFi connected");  
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 
   if (pressure.begin())
     Serial.println("BMP180 init success");
@@ -19,6 +43,8 @@ void setup()
     Serial.println("BMP180 init fail\n\n");
     while(1); // Pause forever.
   }
+
+  
 }
 
 void loop()
@@ -101,7 +127,7 @@ void loop()
           // Parameters: P = absolute pressure in mb, ALTITUDE = current altitude in m.
           // Result: p0 = sea-level compensated pressure in mb
 
-          p0 = pressure.sealevel(P,ALTITUDE); // we're at 1655 meters (Boulder, CO)
+          p0 = pressure.sealevel(P,ALTITUDE);
           Serial.print("relative (sea-level) pressure: ");
           Serial.print(p0,2);
           Serial.print(" mb, ");
@@ -128,5 +154,5 @@ void loop()
   }
   else Serial.println("error starting temperature measurement\n");
 
-  delay(5000);  // Pause for 5 seconds.
+  delay(pollms);
 }
