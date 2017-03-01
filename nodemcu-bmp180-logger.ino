@@ -3,6 +3,14 @@
 #include <ESP8266WiFi.h>
  
 // You will need to create an SFE_BMP180 object, here called "pressure":
+/*NodeMCU by Amica (ESP-12)
+ *  
+ *  ESP | BMP
+ *  3v3 | VIN
+ *  GND | GND
+ *  D1  | SCL
+ *  D2  | SDA
+ */
 
 SFE_BMP180 pressure;
 
@@ -11,7 +19,7 @@ const char* ssid     = "mySSID";
 const char* password = "wifipassword";
 const char* eshost   = "es.local.net";
 const int*  esport   = 9200;
-const int*  pollms   = 5000
+const int*  mspoll   = 5000
 
 void setup()
 {
@@ -154,5 +162,5 @@ void loop()
   }
   else Serial.println("error starting temperature measurement\n");
 
-  delay(pollms);
+  delay(mspoll);
 }
